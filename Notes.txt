@@ -15,3 +15,7 @@ But that's possibly premature.
 Well, no, I guess I do have to address it now.
 But let's start with a simple case, with only one number a more than one (ie. 2) digits.
 And by just reversing the stings, for simplicity's sake. I may revisit that later.
+
+Okay, so far so good; I've got it working when one number is multi-digit.
+
+Next: handle both numbers being multi-digit.

@@ -23,10 +23,33 @@ def log_error(error_str):
 if __name__ == "__main__":
     base = 4
     digits = DIGITS[0:base]
-    x = '3'
-    y = '3'
-    (quotient, remainder) = divmod(digits.index(x) * digits.index(y), base)
-    log_debug('%s\t%s' % (quotient, remainder))
+    input_x = '03030'
+    input_y = '3'
+    x = input_x[::-1]  # Reverse string so we can to right-to-left processing left-to-right
+    y = input_y[::-1]
+    log_debug('x reversed: %s' %x)
+    log_debug('y reversed: %s' %y)
+
+    #(quotient, remainder) = divmod(digits.index(x) * digits.index(y), base)
+    #log_debug('%s\t%s' % (quotient, remainder))
+
+    out_str = ''
+
+    carry_in = 0
+    for x_digit in x:
+        (carry_out, output) = divmod(digits.index(x_digit) * digits.index(y), base)
+        output += carry_in
+        if output >= base:
+            (carry_out, output) = divmod(output, base)
+        assert(output < base)
+        out_str = '%d%s' % (output, out_str)
+        carry_in = carry_out
+    if carry_out:
+        out_str = '%d%s' % (carry_out, out_str)
+
+    print('Answer: %s' % out_str)
+
+
 
 
 
