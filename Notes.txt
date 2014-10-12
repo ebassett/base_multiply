@@ -1,0 +1,17 @@
+base_multiply.py
+2014-10-12 ejb
+
+Here's a good start:
+- quotient (ie. carry) and remainder (ie. number(?!)) from divmod
+- input to divmod:
+  - index of digit times index of digit
+    - where what we are indexing into is the substring of 0-F that is appropriate for the base
+  - the base
+
+Now we just need to - hm, well, on second thought this is going to more complicated than I initially thought.
+I was going to think about whether I should do right-to-left processing by just reversing the input string of digits,
+ or by doing something fancier with a negative step.
+But that's possibly premature.
+Well, no, I guess I do have to address it now.
+But let's start with a simple case, with only one number a more than one (ie. 2) digits.
+And by just reversing the stings, for simplicity's sake. I may revisit that later.
