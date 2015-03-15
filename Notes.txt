@@ -19,3 +19,39 @@ And by just reversing the stings, for simplicity's sake. I may revisit that late
 Okay, so far so good; I've got it working when one number is multi-digit.
 
 Next: handle both numbers being multi-digit.
+Hm, that's actually a bit awkward, since I'm dealing with these things as strings.
+I'll need to store the output string for each row (ie. result of multiplying x with the current digit of y),
+appending an extra zero to the end (ie. one more zero than the one before)
+And then I'll have to write an addition function.
+
+Okay, wrote an base_addition module and imported it. (Symlinked the py file into this directory so I don't have to
+muck about with add it's location to the library path.)
+
+Implemented the loop over the other input's digits.
+And it works! Woohoo!
+
+Nope, no good.
+Worked for all of my tests in base four.
+But base-8 711x5007 includes '9's in the answer, which is nonsense.
+And a base-16 test that should have had letters in the output didn't.
+So, some closer thinking and debugging is required.
+
+=> It was a trivial oversight, using the results of arithmetic operations directly instead of getting the character
+at that index in the digits list.
+
+NEXT:
+- arg-handling:
+  - take args if given on the commandline
+  - else prompt for arg
+- test suite
+
+- Also sort out the IDE project and git repos, because I've got three different things semi-confounded here.
+
+FUTURE:
+- convert/refactor to object-oriented (for the exercise)
+
+
+
+
+
+
