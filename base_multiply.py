@@ -2,12 +2,6 @@
 # -*- coding: utf-8 -*-
 
 # base_multiply - 2014-10-12 - ejb
-__version__ = '0.1'
-'''
-Revision history
-0.1 Initial version
-'''
-
 
 from __future__ import print_function
 import argparse
@@ -15,7 +9,15 @@ from base_addition import base_addition
 import sys
 
 
+__version__ = '0.1'
+'''
+Revision history
+0.1 Initial version
+'''
+
+
 DIGITS = '0123456789ABCDEF'
+debug = False
 
 
 def parse_args():
@@ -31,20 +33,14 @@ def parse_args():
 
 def log_debug(debug_str):
     if debug:
-        print("DEBUG: ", debug_str)
+        print("DEBUG (mulitply): ", debug_str)
 
 def log_error(error_str):
     # EJB: I originally had 'print >> sys.stderr, "ERROR: ", error_str' here
     #       and it was getting buffered, even followed by sys.stderr.flush().
     sys.stderr.write("ERROR: %s.\n" % error_str)
 
-
-if __name__ == "__main__":
-    args = parse_args()
-    debug = args.debug
-    log_debug(args)
-
-    base = args.base
+def base_multiply(debug, base, input_x, input_y):
     digits = DIGITS[0:base]
     log_debug('base: %s' % base)
 
@@ -54,8 +50,8 @@ if __name__ == "__main__":
     log_debug('y: %s' % input_y)
     x = input_x[::-1]  # Reverse string so we can do right-to-left processing left-to-right
     y = input_y[::-1]
-    log_debug('x reversed: %s' %x)
-    log_debug('y reversed: %s' %y)
+    log_debug('x reversed: %s' % x)
+    log_debug('y reversed: %s' % y)
 
     # TODO: Validate that input digits are valid in given base
 
@@ -76,6 +72,19 @@ if __name__ == "__main__":
         products.append('%s%s' % (out_str, '0' * len(products)))
     answer = 0
     for product in products:
-        answer = base_addition(base=base, x=answer, y=product)
+        answer = base_addition(debug=debug, base=base, x=answer, y=product)
 
+    return answer
+
+
+if __name__ == "__main__":
+    args = parse_args()
+    debug = args.debug
+    log_debug(args)
+
+    base = args.base
+    x = args.input_x
+    y = args.input_y
+
+    answer = base_multiply(debug=debug, base=base, input_x=x, input_y=y)
     print('Answer: %s' % answer)
