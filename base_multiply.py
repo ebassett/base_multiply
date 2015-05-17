@@ -22,9 +22,8 @@ debug = False
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Multiply two numbers in a given base (default 10).")
-    parser.add_argument("input_x", type=str, metavar="x", help="first  multiplicand")
-    parser.add_argument("input_y", type=str, metavar="y", help="second multiplicand")
     parser.add_argument("-b", "--base", type=int, dest="base", choices=xrange(2, 17), default=10, help="base (2-16); default = %(default)s")
+    parser.add_argument("multiplicands", type=str, metavar="NUM", nargs='+', help="first  multiplicand")
     parser.add_argument('--version', action='version', version='%(prog)s v' + str(__version__))
     parser.add_argument("--debug", "--verbose", action="store_true", dest="debug", help="enable debugging output")
     return parser.parse_args()
@@ -38,43 +37,54 @@ def log_debug(debug_str):
 def log_error(error_str):
     # EJB: I originally had 'print >> sys.stderr, "ERROR: ", error_str' here
     #       and it was getting buffered, even followed by sys.stderr.flush().
-    sys.stderr.write("ERROR: %s.\n" % error_str)
+    sys.stderr.write("ERROR: {}.\n".format(error_str))
 
-def base_multiply(debug, base, input_x, input_y):
+def base_multiply(debug, base, multiplicands):
     digits = DIGITS[0:base]
-    log_debug('base: %s' % base)
+    accumulator = 1  # Multiplicative identity
 
-    input_x = args.input_x
-    input_y = args.input_y
-    log_debug('x: %s' % input_x)
-    log_debug('y: %s' % input_y)
-    x = input_x[::-1]  # Reverse string so we can do right-to-left processing left-to-right
-    y = input_y[::-1]
-    log_debug('x reversed: %s' % x)
-    log_debug('y reversed: %s' % y)
+    log_debug('base: {}'.format(base))
+    log_debug('multiplicands: {}'.format(multiplicands))
 
-    # TODO: Validate that input digits are valid in given base
+    if len(multiplicands) == 1:
+        return multiplicands.pop()
+    else:
+        accumulator = multiplicands.pop()
 
-    products = []
-    for y_digit in y:
-        out_str = ''
-        carry_in = 0
-        for x_digit in x:
-            (carry_out, output) = divmod(digits.index(x_digit) * digits.index(y_digit), base)
-            output += carry_in
-            if output >= base:
-                (carry_out, output) = divmod(output, base)
-            assert(output < base)
-            out_str = '%s%s' % (digits[output], out_str)
-            carry_in = carry_out
-        if carry_out:
-            out_str = '%s%s' % (digits[carry_out], out_str)
-        products.append('%s%s' % (out_str, '0' * len(products)))
-    answer = 0
-    for product in products:
-        answer = base_addition(debug=debug, base=base, x=answer, y=product)
+    while len(multiplicands) > 0:
+        input_x = accumulator
+        input_y = multiplicands.pop()
 
-    return answer
+
+        log_debug('x: {}'.format(input_x))
+        log_debug('y: {}'.format(input_y))
+        x = input_x[::-1]  # Reverse string so we can do right-to-left processing left-to-right
+        y = input_y[::-1]
+        log_debug('x reversed: {}'.format(x))
+        log_debug('y reversed: {}'.format(y))
+
+        # TODO: Validate that input digits are valid in given base
+
+        products = []
+        for y_digit in y:
+            out_str = ''
+            carry_in = 0
+            for x_digit in x:
+                (carry_out, output) = divmod(digits.index(x_digit) * digits.index(y_digit), base)
+                output += carry_in
+                if output >= base:
+                    (carry_out, output) = divmod(output, base)
+                assert(output < base)
+                out_str = '{}{}'.format(digits[output], out_str)
+                carry_in = carry_out
+            if carry_out:
+                out_str = '{}{}'.format(digits[carry_out], out_str)
+            products.append('{}{}'.format(out_str, '0' * len(products)))
+        answer = 0
+        for product in products:
+            accumulator = base_addition(debug=debug, base=base, x=answer, y=product)
+
+    return accumulator
 
 
 if __name__ == "__main__":
@@ -83,8 +93,7 @@ if __name__ == "__main__":
     log_debug(args)
 
     base = args.base
-    x = args.input_x
-    y = args.input_y
+    multiplicands = args.multiplicands
 
-    answer = base_multiply(debug=debug, base=base, input_x=x, input_y=y)
-    print('Answer: %s' % answer)
+    answer = base_multiply(debug=debug, base=base, multiplicands=multiplicands)
+    print('Answer: {}'.format(answer))

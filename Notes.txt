@@ -62,7 +62,9 @@ FUTURE:
   - That shouldn't be too bad, actually: put them in a list, initialize an accumulator to 1, and multiply the
   accumulator with list.pop().
     - The easy way to do this would be in __main__, but I want to do it in the actual base_multiply method so that it still works as an imported module
-    - TODO: extract the meat of base_multiply out of __main__ into its own function.
+      - TODO: extract the meat of base_multiply out of __main__ into its own function.
+        => DONE
+      => DONE
   - Do the equivalent with base_addition.
 
 
