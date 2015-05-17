@@ -25,7 +25,7 @@ appending an extra zero to the end (ie. one more zero than the one before)
 And then I'll have to write an addition function.
 
 Okay, wrote an base_addition module and imported it. (Symlinked the py file into this directory so I don't have to
-muck about with add it's location to the library path.)
+muck about with add its location to the library path.)
 
 Implemented the loop over the other input's digits.
 And it works! Woohoo!
@@ -42,13 +42,26 @@ at that index in the digits list.
 NEXT:
 - arg-handling:
   - take args if given on the commandline
+    => Okay, I've got this
   - else prompt for arg
-- test suite
+    => I'm not sure I want to do this
+- Take the body out of __main__ and put it in a method so that it can be imported as a module
+- Make __main__ run the test-suite
+  - Or should __main__ be used in both for running the script, and I'll have some separate test harness? I guess so...
+    - Maybe a mutually-exclusive arg group for --test
+- Implement arg-parsing in base_addition
+- Can base_addition respect base_multiplication's --debug flag?
+  - Probably either by uglily adding a debug parameter to the base_addition function, or else by converting the entire enterprise to object-oriented and making debug a member-variable
+- test suites for base_addition and base_multiplication
 
-- Also sort out the IDE project and git repos, because I've got three different things semi-confounded here.
+- Also sort out the IDE project and git repos, because I've got three different things semi-confounded here (on sjgould).
 
 FUTURE:
-- convert/refactor to object-oriented (for the exercise)
+- convert/refactor to object-oriented (just for the exercise)
+- allow arbitrary number of multiplicands?
+  - That shouldn't be too bad, actually: put them in a list, initialize an accumulator to 1, and multiply the
+  accumulator with list.pop().
+    - Do the equivalent with base_addition.
 
 
 
