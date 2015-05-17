@@ -9,6 +9,7 @@ Revision history
 '''
 
 
+from __future__ import print_function
 import argparse
 from base_addition import base_addition
 import sys
@@ -30,7 +31,7 @@ def parse_args():
 
 def log_debug(debug_str):
     if debug:
-        print "DEBUG: ", debug_str
+        print("DEBUG: ", debug_str)
 
 def log_error(error_str):
     # EJB: I originally had 'print >> sys.stderr, "ERROR: ", error_str' here
