@@ -22,8 +22,10 @@ debug = False
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Multiply two numbers in a given base (default 10).")
+    group = parser.add_mutually_exclusive_group()
     parser.add_argument("-b", "--base", type=int, dest="base", choices=xrange(2, 17), default=10, help="base (2-16); default = %(default)s")
-    parser.add_argument("multiplicands", type=str, metavar="NUM", nargs='+', help="first  multiplicand")
+    group.add_argument("--multiplicands", type=str, metavar="NUM", nargs='+', help="multiplicands")
+    group.add_argument("--test", action="store_true", help="run test suite")
     parser.add_argument('--version', action='version', version='%(prog)s v' + str(__version__))
     parser.add_argument("--debug", "--verbose", action="store_true", dest="debug", help="enable debugging output")
     return parser.parse_args()
@@ -39,6 +41,9 @@ def log_error(error_str):
     #       and it was getting buffered, even followed by sys.stderr.flush().
     sys.stderr.write("ERROR: {}.\n".format(error_str))
 
+def run_tests():
+    pass
+
 def base_multiply(debug, base, multiplicands):
     digits = DIGITS[0:base]
     accumulator = 1  # Multiplicative identity
@@ -46,15 +51,21 @@ def base_multiply(debug, base, multiplicands):
     log_debug('base: {}'.format(base))
     log_debug('multiplicands: {}'.format(multiplicands))
 
+    if not multiplicands:
+        log_error('No multiplicands.')
+        sys.exit(-1)
+
     if len(multiplicands) == 1:
         return multiplicands.pop()
     else:
+        multiplicands = multiplicands[::-1]  # Reverse so we process efficiently in user-given order.
+        log_debug('multiplicands: {}'.format(multiplicands))
         accumulator = multiplicands.pop()
+        log_debug('accumulator: {}'.format(accumulator))
 
     while len(multiplicands) > 0:
         input_x = accumulator
         input_y = multiplicands.pop()
-
 
         log_debug('x: {}'.format(input_x))
         log_debug('y: {}'.format(input_y))
@@ -65,10 +76,11 @@ def base_multiply(debug, base, multiplicands):
 
         # TODO: Validate that input digits are valid in given base
 
-        products = []
+        partial_products = []
+        final_products = []
+        carry_in = 0
         for y_digit in y:
             out_str = ''
-            carry_in = 0
             for x_digit in x:
                 (carry_out, output) = divmod(digits.index(x_digit) * digits.index(y_digit), base)
                 output += carry_in
@@ -79,21 +91,41 @@ def base_multiply(debug, base, multiplicands):
                 carry_in = carry_out
             if carry_out:
                 out_str = '{}{}'.format(digits[carry_out], out_str)
-            products.append('{}{}'.format(out_str, '0' * len(products)))
+            partial_products.append('{}{}'.format(out_str, '0' * len(partial_products)))
         answer = 0
-        for product in products:
-            accumulator = base_addition(debug=debug, base=base, x=answer, y=product)
+        log_debug('partial_products of digits: {}'.format(partial_products))
+        for partial_product in partial_products:
+            answer = base_addition(debug=debug, base=base, addends = [answer, partial_product])
+            log_debug('sum of partial products of digits: {}'.format(answer))
+        accumulator = answer
+        final_products.append(answer)
+        # EJB: This is wrong.
+        #log_debug('accumulator before adding final answer of previous two multiplicands: {}'.format(accumulator))
+        #accumulator = base_addition(debug=debug, base=base, addends = [accumulator, answer])
+        #log_debug('accumulator after adding final answer of previous two multiplicands: {}'.format(accumulator))
+    final_answer = 0
+    for final_product in final_products:
+        final_answer = base_addition(debug=debug, base=base, addends = [final_answer, final_product])
 
-    return accumulator
+    # Ugly special-case handling for something like '000000'
+    try:
+        if int(final_answer) == 0:
+            final_answer = '0'
+    except:  # If int(_) fails because final_answer is something like 1FF, then just let it through.
+        pass
 
+    return final_answer
 
 if __name__ == "__main__":
     args = parse_args()
     debug = args.debug
     log_debug(args)
 
-    base = args.base
-    multiplicands = args.multiplicands
+    if args.test:
+        run_tests()
+    else:
+        base = args.base
+        multiplicands = args.multiplicands
 
-    answer = base_multiply(debug=debug, base=base, multiplicands=multiplicands)
-    print('Answer: {}'.format(answer))
+        answer = base_multiply(debug=debug, base=base, multiplicands=multiplicands)
+        print('Answer: {}'.format(answer))
