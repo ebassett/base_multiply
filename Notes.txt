@@ -35,6 +35,7 @@ Worked for all of my tests in base four.
 But base-8 711x5007 includes '9's in the answer, which is nonsense.
 And a base-16 test that should have had letters in the output didn't.
 So, some closer thinking and debugging is required.
+  => DONE
 
 => It was a trivial oversight, using the results of arithmetic operations directly instead of getting the character
 at that index in the digits list.
@@ -45,14 +46,19 @@ NEXT:
     => Okay, I've got this
   - else prompt for arg
     => I'm not sure I want to do this
+      => NAH.
 - Take the body out of __main__ and put it in a method so that it can be imported as a module
+  => DONE.
 - Make __main__ run the test-suite
   - Or should __main__ be used in both for running the script, and I'll have some separate test harness? I guess so...
     - Maybe a mutually-exclusive arg group for --test
+      => DONE.
 - Implement arg-parsing in base_addition
-- Can base_addition respect base_multiplication's --debug flag?
+  => DONE.
+- TODO: Can base_addition respect base_multiplication's --debug flag?
   - Probably either by uglily adding a debug parameter to the base_addition function, or else by converting the entire enterprise to object-oriented and making debug a member-variable
 - test suites for base_addition and base_multiplication
+  => DONE
 
 - Also sort out the IDE project and git repos, because I've got three different things semi-confounded here (on sjgould).
 
@@ -68,17 +74,18 @@ BUGS:
 
 
 FUTURE:
-- convert/refactor to object-oriented (just for the exercise)
+- TODO: convert/refactor to object-oriented (just for the exercise)
+
 - allow arbitrary number of multiplicands?
   - That shouldn't be too bad, actually: put them in a list, initialize an accumulator to 1, and multiply the
   accumulator with list.pop().
     - The easy way to do this would be in __main__, but I want to do it in the actual base_multiply method so that it still works as an imported module
-      - TODO: extract the meat of base_multiply out of __main__ into its own function.
+      - _TODO: extract the meat of base_multiply out of __main__ into its own function.
         => DONE
       => DONE
   - Do the equivalent with base_addition.
-
-
+    => DONE
+  => DONE
 
 
 
