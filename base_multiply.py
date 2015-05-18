@@ -16,7 +16,7 @@ Revision history
 '''
 
 
-DIGITS = '0123456789ABCDEF'
+DIGITS = '0123456789ABCDEF'  # Trivially extendible to higher bases.
 debug = False
 
 
@@ -77,6 +77,18 @@ def base_multiply(debug, base, multiplicands):
     log_debug('base: {}'.format(base))
     log_debug('multiplicands: {}'.format(multiplicands))
 
+    # Validate that input digits are valid in given base
+    valid = True
+    for multiplicand in multiplicands:
+        for digit in str(multiplicand).upper():
+            if not str(digit).upper() in digits:
+                valid = False
+                log_error('Invalid number {} for base {}'.format(multiplicand, base))
+                break
+    if not valid:
+        sys.exit(-1)
+
+
     if not multiplicands:
         log_error('No multiplicands.')
         sys.exit(-1)
@@ -90,8 +102,8 @@ def base_multiply(debug, base, multiplicands):
         log_debug('accumulator: {}'.format(accumulator))
 
     while len(multiplicands) > 0:
-        input_x = str(accumulator)
-        input_y = str(multiplicands.pop())
+        input_x = str(accumulator).upper()
+        input_y = str(multiplicands.pop()).upper()
 
         log_debug('x: {}'.format(input_x))
         log_debug('y: {}'.format(input_y))
@@ -100,7 +112,6 @@ def base_multiply(debug, base, multiplicands):
         log_debug('x reversed: {}'.format(x))
         log_debug('y reversed: {}'.format(y))
 
-        # TODO: Validate that input digits are valid in given base
 
         partial_products = []
         final_products = []

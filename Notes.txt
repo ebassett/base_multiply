@@ -13,7 +13,7 @@ I was going to think about whether I should do right-to-left processing by just 
  or by doing something fancier with a negative step.
 But that's possibly premature.
 Well, no, I guess I do have to address it now.
-But let's start with a simple case, with only one number a more than one (ie. 2) digits.
+But let's start with a simple case, with only one number at more than one (ie. 2) digits.
 And by just reversing the stings, for simplicity's sake. I may revisit that later.
 
 Okay, so far so good; I've got it working when one number is multi-digit.
@@ -80,7 +80,7 @@ FUTURE:
   - That shouldn't be too bad, actually: put them in a list, initialize an accumulator to 1, and multiply the
   accumulator with list.pop().
     - The easy way to do this would be in __main__, but I want to do it in the actual base_multiply method so that it still works as an imported module
-      - _TODO: extract the meat of base_multiply out of __main__ into its own function.
+      - _TODO first: extract the meat of base_multiply out of __main__ into its own function.
         => DONE
       => DONE
   - Do the equivalent with base_addition.
