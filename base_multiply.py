@@ -78,10 +78,10 @@ def base_multiply(debug, base, multiplicands):
 
         partial_products = []
         final_products = []
-        carry_in = 0
         for y_digit in y:
             log_debug('y_digit: {}'.format(y_digit))
             out_str = ''
+            carry_in = 0
             for x_digit in x:
                 log_debug('x_digit: {}'.format(x_digit))
                 (carry_out, output) = divmod(digits.index(x_digit) * digits.index(y_digit), base)
@@ -89,14 +89,19 @@ def base_multiply(debug, base, multiplicands):
                 log_debug('carry_out: {}'.format(carry_out))
                 output += carry_in
                 log_debug('output with carry_in: {}'.format(output))
-                if output >= base:
+                while output >= base:
                     (extra_carry_out, output) = divmod(output, base)
+                    log_debug('extra carry_out: {}'.format(extra_carry_out))
                     carry_out += extra_carry_out
+                    log_debug('new total carry_out: {}'.format(carry_out))
+
                 assert(output < base)
                 out_str = '{}{}'.format(digits[output], out_str)
+                log_debug('out_str: {}'.format(out_str))
                 carry_in = carry_out
             if carry_out:
                 out_str = '{}{}'.format(digits[carry_out], out_str)
+                log_debug('output after applying leftover carry_out ({}): {}'.format(digits[carry_out], out_str))
             partial_products.append('{}{}'.format(out_str, '0' * len(partial_products)))
         answer = 0
         log_debug('partial_products of digits: {}'.format(partial_products))
@@ -121,6 +126,7 @@ def base_multiply(debug, base, multiplicands):
         pass
 
     return final_answer
+
 
 if __name__ == "__main__":
     args = parse_args()

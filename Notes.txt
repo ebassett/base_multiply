@@ -56,6 +56,17 @@ NEXT:
 
 - Also sort out the IDE project and git repos, because I've got three different things semi-confounded here (on sjgould).
 
+
+BUGS:
+- I am getting an incorrect result on base-16 789ABC x 5DEF (2C40CF27F4 instead of 2C40CEC184; ie. I am *over*)
+  - So I am walking through the calculation on paper and comparing interim results.
+  - 789ABC x F is correct: 7 11 11 04
+  - 789ABC x E is also correct *by itself*: 6 98 76 48
+    - But as part of the full calculation, that partial product is wrong: 6 98 76 4F 0 (where the trailing zero is from being in the tens position
+  => FIXED.
+
+
+
 FUTURE:
 - convert/refactor to object-oriented (just for the exercise)
 - allow arbitrary number of multiplicands?
