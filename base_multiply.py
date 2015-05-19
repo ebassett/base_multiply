@@ -16,13 +16,13 @@ Revision history
 '''
 
 
-DIGITS = '0123456789ABCDEF'  # Trivially extendible to higher bases.
+DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 debug = False
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Multiply two numbers in a given base (default 10).")
-    parser.add_argument("-b", "--base", type=int, dest="base", choices=xrange(2, 17), default=10, help="base (2-16); default = %(default)s")
+    parser.add_argument("-b", "--base", type=int, dest="base", choices=xrange(2, 36 + 1), default=10, help="base (2-36); default = %(default)s")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--multiplicands", type=str, metavar="NUM", nargs='+', help="multiplicands")
     group.add_argument("--test", action="store_true", help="run test suite")
@@ -43,31 +43,26 @@ def log_error(error_str):
 
 def run_tests():
     assert(base_multiply(debug=False, base=2,  multiplicands=[110, 1]) == '110')
+    assert(base_multiply(debug=False, base=3,  multiplicands=[102, 11]) == '1122')
+    assert(base_multiply(debug=False, base=3,  multiplicands=[200, 222]) == '122100')
     assert(base_multiply(debug=False, base=4,  multiplicands=[323, 212]) == '203002')
     assert(base_multiply(debug=False, base=4,  multiplicands=[212, 323]) == '203002')
+    assert(base_multiply(debug=False, base=5,  multiplicands=[201, 12]) == '2412')
+    assert(base_multiply(debug=False, base=5,  multiplicands=[114, 32]) == '4303')
+    assert(base_multiply(debug=False, base=6,  multiplicands=[11, 13]) == '143')
+    assert(base_multiply(debug=False, base=6,  multiplicands=[1001, 225]) == '225225')
     assert(base_multiply(debug=False, base=7,  multiplicands=[66, 11, 222, 0]) == '0')
     assert(base_multiply(debug=False, base=8,  multiplicands=[7, 6, 5, 4, 3, 2, 1]) == '11660')
     assert(base_multiply(debug=False, base=8,  multiplicands=[711, 5007]) == '4363177')
     assert(base_multiply(debug=False, base=9,  multiplicands=[3, 3]) == '10')
     assert(base_multiply(debug=False, base=10, multiplicands=[33333, 3]) == '99999')
+    assert(base_multiply(debug=False, base=12, multiplicands=[7, 13]) == '89')
+    assert(base_multiply(debug=False, base=12, multiplicands=['2B', '3A']) == 'B22')
+    assert(base_multiply(debug=False, base=12, multiplicands=['3a', '2b']) == 'B22')
     assert(base_multiply(debug=False, base=16, multiplicands=['789ABC', '5DEF']) == '2C40CEC184')
     assert(base_multiply(debug=False, base=16, multiplicands=['DEAD', 'BEEF']) == 'A6144983')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
-    # assert(base_multiply(debug=False, base=, multiplicands=[]) == '')
+    assert(base_multiply(debug=False, base=20, multiplicands=['GB', 'EB']) == 'C0G1')
+    assert(base_multiply(debug=False, base=36, multiplicands=['ED', 'GAIL']) == '6HZ0VL')
     print ('All tests passed.')
 
 def base_multiply(debug, base, multiplicands):
